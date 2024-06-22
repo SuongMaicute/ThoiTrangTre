@@ -57,7 +57,18 @@ namespace API
             builder.Services.AddLogging();
             builder.Services.AddMemoryCache();
             builder.AppAuthentication();
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+            builder.Services.AddCors(p => p.AddPolicy(MyAllowSpecificOrigins, builder =>
+            {
+                builder.WithOrigins("http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003",
+                    "http://localhost:8086")
+                       .AllowAnyMethod()
+                       .AllowAnyHeader()
+                       .AllowCredentials(); // Add this line to allow credentials
+
+                // Other configurations...
+            }));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -68,7 +79,7 @@ namespace API
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthentication();
             app.UseAuthorization();
 
