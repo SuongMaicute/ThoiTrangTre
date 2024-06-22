@@ -88,6 +88,7 @@ namespace API.Controllers
         {
             try
             {
+                // test
                 User? user = _repo.UserRepository.Get( u => u.UsersEmail == dto.email);
                 if (user != null && user.Passwords == SD.ComputeSha256Hash(dto.OldPass))
                 {
