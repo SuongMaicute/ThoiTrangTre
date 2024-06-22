@@ -35,10 +35,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push auth
+      - name: Build and push prm
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./API/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/auth:latest, ${{ secrets.DOCKERHUB_USERNAME }}/auth:${{ github.run_number }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/prm:latest, ${{ secrets.DOCKERHUB_USERNAME }}/prm:${{ github.run_number }}
