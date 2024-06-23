@@ -30,10 +30,10 @@ jobs:
       - name: Set up Docker Buildx on Windows
         if: runner.os == 'Windows'
         run: |
-          Invoke-WebRequest -Uri https://github.com/docker/buildx/releases/download/v0.10.5/buildx-v0.10.5.windows-amd64.zip -OutFile buildx.zip
+          Invoke-WebRequest -Uri https://github.com/docker/buildx/releases/download/v0.10.4/buildx-v0.10.4.windows-amd64.zip -OutFile buildx.zip
           Expand-Archive -Path buildx.zip -DestinationPath .
           mkdir -p $Env:USERPROFILE\.docker\cli-plugins
-          Move-Item -Path ./buildx-v0.10.5.windows-amd64.exe -Destination $Env:USERPROFILE\.docker\cli-plugins\docker-buildx.exe
+          Move-Item -Path .\buildx-v0.10.4.windows-amd64.exe -Destination $Env:USERPROFILE\.docker\cli-plugins\docker-buildx.exe
           docker buildx create --name builder
           docker buildx use builder
           docker buildx inspect --bootstrap
