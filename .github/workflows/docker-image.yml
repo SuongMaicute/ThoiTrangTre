@@ -8,35 +8,28 @@ on:
       - README.md
       - .vscode/**
       - .gitignore
+      - '**/.dockerignore'
   pull_request:
     branches: [ master ]
     paths-ignore:
       - README.md
       - .vscode/**
       - .gitignore
+      - '**/.dockerignore'
   workflow_dispatch:
 
 jobs:
   docker:
-    runs-on: windows-2022
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up Docker Buildx
-        if: runner.os != 'Windows'
-        uses: docker/setup-buildx-action@v1
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
 
-      - name: Set up Docker Buildx on Windows
-        if: runner.os == 'Windows'
-        run: |
-          Invoke-WebRequest -Uri https://github.com/docker/buildx/releases/download/v0.10.4/buildx-v0.10.4.windows-amd64.zip -OutFile buildx.zip
-          Expand-Archive -Path buildx.zip -DestinationPath .
-          mkdir -p $Env:USERPROFILE\.docker\cli-plugins
-          Move-Item -Path .\buildx-v0.10.4.windows-amd64.exe -Destination $Env:USERPROFILE\.docker\cli-plugins\docker-buildx.exe
-          docker buildx create --name builder
-          docker buildx use builder
-          docker buildx inspect --bootstrap
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
@@ -44,10 +37,21 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push prm
+      - name: Build and push auth
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./API/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/prm:latest, ${{ secrets.DOCKERHUB_USERNAME }}/prm:${{ github.run_number }}
+
+      
+# Thêm bước chạy file shell script trên server
+      - name: Run deploy script on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}  # Thay thế bằng địa chỉ IP của server
+          username: ${{ secrets.SERVER_USERNAME }}  # Thay thế bằng tên người dùng trên server
+          password: ${{ secrets.SERVER_PASS }}  # Thay thế bằng mật khẩu server
+          script: |
+            bash /home/gituser/prm.sh
