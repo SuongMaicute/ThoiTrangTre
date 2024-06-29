@@ -20,6 +20,7 @@ namespace API
                 config.CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
 
                 config.CreateMap<User, RegisterDTO>().ReverseMap();
+                config.CreateMap<Product, ProductDTO>().ReverseMap();
 
             });
             return mappingConfig;

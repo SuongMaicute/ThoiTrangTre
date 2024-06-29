@@ -36,6 +36,13 @@ namespace MPVI_Warehouse.Util
             Deleted
         }
 
+        public enum ProductStatus
+        {
+            Available,
+            Deleted
+        }
+        
+
         public static string ComputeSha256Hash(string rawData)
         {
             // Tạo SHA256
@@ -53,6 +60,9 @@ namespace MPVI_Warehouse.Util
                 return builder.ToString();
             }
         }
+
+
+
 
     }
 }
