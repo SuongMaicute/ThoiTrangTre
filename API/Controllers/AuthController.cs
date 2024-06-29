@@ -66,6 +66,7 @@ namespace API.Controllers
                 dto.UsersEmail = dto.UsersEmail.ToLower();
                 dto.Passwords = SD.ComputeSha256Hash(dto.Passwords);
                 User? register = _mapper.Map<User>(dto);
+                register.RoleId = 3;
                 if (register != null)
                 {
                     _repo.UserRepository.Add(register);
