@@ -25,17 +25,14 @@ namespace API.Controllers
             _mapper = map;
         }
 
-        [HttpGet("{category}")]
-        public async Task<ResponseDTO> GetAll( string? category)
+        [HttpGet()]
+        public async Task<ResponseDTO> GetAll()
         {
             try
             {
                 IEnumerable < Product > result = _mapper.Map<IEnumerable<Product>>(_repo.ProductRepository
                             .GetAll(u => u.ProductStatus != SD.ProductStatus.Deleted.ToString()));
-                if(!string.IsNullOrEmpty(category))
-                {
-                    result = result.Where( u => u.ProductCategory.Contains(category));
-                }
+
             }
             catch (Exception ex)
             {
