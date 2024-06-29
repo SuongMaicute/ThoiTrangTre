@@ -44,14 +44,3 @@ jobs:
           file: ./API/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/prm:latest, ${{ secrets.DOCKERHUB_USERNAME }}/prm:${{ github.run_number }}
-
-      
-# Thêm bước chạy file shell script trên server
-      - name: Run deploy script on server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_IP }}  # Thay thế bằng địa chỉ IP của server
-          username: ${{ secrets.SERVER_USERNAME }}  # Thay thế bằng tên người dùng trên server
-          password: ${{ secrets.SERVER_PASS }}  # Thay thế bằng mật khẩu server
-          script: |
-            bash /home/gituser/prm.sh
