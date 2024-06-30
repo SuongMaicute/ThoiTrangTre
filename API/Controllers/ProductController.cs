@@ -32,7 +32,7 @@ namespace API.Controllers
             {
                 IEnumerable < Product > result = _mapper.Map<IEnumerable<Product>>(_repo.ProductRepository
                             .GetAll(u => u.ProductStatus != SD.ProductStatus.Deleted.ToString()));
-
+                _response.Result = result;
             }
             catch (Exception ex)
             {
