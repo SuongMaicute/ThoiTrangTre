@@ -3,6 +3,7 @@
     public class CreateOrderViewModel
     {
         public int UserId { get; set; }
-        public List<OrderItemDTO> Items { get; set; }
+        public float Total { get; set; }
+        public List<CreateCartItem> Items { get; set; }
     }
 }

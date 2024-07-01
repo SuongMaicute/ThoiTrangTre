@@ -93,7 +93,7 @@ namespace API.Controllers
                 {
                     OrderDate = DateTime.Now,
                     UserId = dto.UserId,
-                    OrderTotalAmount = joinedData.Sum(),
+                    OrderTotalAmount = decimal.Parse(dto.Total.ToString()),
                     OrderStatus = SD.OrderStatus.PaySucess.ToString()
                 };
 
@@ -102,7 +102,13 @@ namespace API.Controllers
 
                 foreach (var item in dto.Items)
                 {
-                    OrderItem itemData = _mapper.Map<OrderItem>(item);
+                    OrderItem itemData = new OrderItem()
+                    {
+                        OrderId = data.OrderId,
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity,
+                        Price = item.Price
+                    };
                     _repo.OrderRepository.Add(data);
                 }
                 _repo.Save();
