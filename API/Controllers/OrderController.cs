@@ -183,5 +183,35 @@ namespace API.Controllers
 
         }
 
+
+        [HttpPut("ChangeStatus")]
+        public async Task<ResponseDTO> ChangeStatus(int orderid, string newstatus)
+        {
+            try
+            {
+                Order? data = _repo.OrderRepository.Get(u => u.OrderId == orderid && u.OrderStatus != SD.OrderStatus.Deleted.ToString());
+                if (data != null)
+                {
+                    data.OrderStatus = newstatus;
+                    _repo.OrderRepository.Update(data);
+                    _repo.Save();
+                    _response.Message = "Delete succesfully !!! ";
+                }
+                else
+                {
+                    _response.Message = " Not found  !!! ";
+                    _response.IsSuccess = false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+
+        }
+
     }
 }
