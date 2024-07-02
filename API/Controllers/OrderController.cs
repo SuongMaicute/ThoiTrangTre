@@ -214,36 +214,7 @@ namespace API.Controllers
         }
 
 
-        [HttpPut("UpdateUser")]
-        public async Task<ResponseDTO> UpdateUser(UpdateUser dto)
-        {
-            try
-            {
-                User? data = _repo.UserRepository.Get(u => u.UsersId == dto.userid );
-                if (data != null)
-                {
-                    data.UsersName = dto.UsersName;
-                    data.UsersPhone = dto.UsersPhone;
-                    data.UsersAddress = dto.UsersAddress;
-                    _repo.UserRepository.Update(data);  
-                    _repo.Save();
-                    _response.Message = "Update succesfully !!! ";
-                }
-                else
-                {
-                    _response.Message = " Not found  !!! ";
-                    _response.IsSuccess = false;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-            return _response;
-
-        }
+      
 
     }
 }
