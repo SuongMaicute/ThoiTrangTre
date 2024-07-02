@@ -109,7 +109,7 @@ namespace API.Controllers
                         Quantity = item.Quantity,
                         Price = item.Price
                     };
-                    _repo.OrderRepository.Add(data);
+                    _repo.OrderItemRepository.Add(itemData);
                 }
                 _repo.Save();
                 _response.Message = "Add succesfully !!! ";
