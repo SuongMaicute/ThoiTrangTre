@@ -115,14 +115,9 @@ public partial class ThoiTrangContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("order_status");
             entity.Property(e => e.OrderTotalAmount)
-                .HasColumnType("decimal(10, 2)")
+                .HasColumnType("float")
                 .HasColumnName("order_total_amount");
             entity.Property(e => e.UserId).HasColumnName("user_id");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_orders_users");
         });
 
         modelBuilder.Entity<OrderItem>(entity =>
@@ -134,20 +129,12 @@ public partial class ThoiTrangContext : DbContext
             entity.Property(e => e.OrderItemId).HasColumnName("order_item_id");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.Price)
-                .HasColumnType("decimal(10, 2)")
+                .HasColumnType("float")
                 .HasColumnName("price");
             entity.Property(e => e.ProductId).HasColumnName("product_id");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
 
-            entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
-                .HasForeignKey(d => d.OrderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_order_item_orders");
-
-            entity.HasOne(d => d.Product).WithMany(p => p.OrderItems)
-                .HasForeignKey(d => d.ProductId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_order_item_product");
+            
         });
 
         modelBuilder.Entity<Payment>(entity =>
@@ -171,10 +158,7 @@ public partial class ThoiTrangContext : DbContext
                 .HasColumnName("order_status");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
-            entity.HasOne(d => d.Order).WithMany(p => p.Payments)
-                .HasForeignKey(d => d.OrderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_payment_orders");
+          
         });
 
         modelBuilder.Entity<Product>(entity =>

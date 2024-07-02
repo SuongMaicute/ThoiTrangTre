@@ -8,7 +8,7 @@
 
         public int UserId { get; set; }
 
-        public decimal OrderTotalAmount { get; set; }
+        public double? OrderTotalAmount { get; set; }
 
         public string OrderStatus { get; set; } = null!;
     }

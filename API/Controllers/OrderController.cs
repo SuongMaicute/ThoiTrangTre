@@ -59,8 +59,8 @@ namespace API.Controllers
         {
             try
             {
-                _response.Result = _mapper.Map<IEnumerable<OrderDTO>>
-                    (_repo.OrderRepository.GetAll(u => u.OrderStatus != SD.OrderStatus.Deleted.ToString()));
+                var res = _repo.OrderRepository.GetAll(u => u.OrderStatus != SD.OrderStatus.Deleted.ToString());
+                _response.Result = _mapper.Map<IEnumerable<OrderDTO>>( res);
             }
             catch (Exception ex)
             {
@@ -69,6 +69,24 @@ namespace API.Controllers
             }
             return _response;
         }
+
+        [HttpGet("GetByUserID")]
+        public async Task<ResponseDTO> GetByUserID( int userid)
+        {
+            try
+            {
+                var res = _repo.OrderRepository.GetAll(u => u.OrderStatus != SD.OrderStatus.Deleted.ToString() && u.UserId == userid);
+                _response.Result = _mapper.Map<IEnumerable<OrderDTO>>(res);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+
 
         [HttpPost]
         public async Task<ResponseDTO> CreateNew(CreateOrderViewModel dto)
@@ -84,16 +102,13 @@ namespace API.Controllers
 
                 IEnumerable<Product> products = _repo.ProductRepository.GetAll();
 
-                IEnumerable<decimal> joinedData = from orderItem in dto.Items
-                                                  join category in products
-                                                  on orderItem.ProductId equals category.ProductId
-                                                  select orderItem.Price;
+                
 
                 Order data = new Order()
                 {
                     OrderDate = DateTime.Now,
                     UserId = dto.UserId,
-                    OrderTotalAmount = decimal.Parse(dto.Total.ToString()),
+                    OrderTotalAmount = dto.Total,
                     OrderStatus = SD.OrderStatus.PaySucess.ToString()
                 };
 
