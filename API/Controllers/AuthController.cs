@@ -24,6 +24,22 @@ namespace API.Controllers
             _mapper = map;
         }
 
+        [HttpGet]
+        public async Task<ResponseDTO> Getall()
+        {
+            try
+            {
+                _response.Result = _repo.UserRepository.GetAll();
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+
         [HttpPost]
         public async Task<ResponseDTO> Login(string email, string pass)
         {
