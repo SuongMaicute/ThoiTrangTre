@@ -109,7 +109,8 @@ namespace API.Controllers
                     OrderDate = DateTime.Now,
                     UserId = dto.UserId,
                     OrderTotalAmount = dto.Total,
-                    OrderStatus = SD.OrderStatus.PaySucess.ToString()
+                    OrderStatus = SD.OrderStatus.PaySucess.ToString(),
+                    PaymentType = dto.PaymentType
                 };
 
                 _repo.OrderRepository.Add(data);
