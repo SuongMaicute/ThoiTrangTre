@@ -85,7 +85,7 @@ namespace API.Controllers
         {
             try
             {
-                Product? data = _repo.ProductRepository.Get(u => u.ProductId == dto.ProductId);
+                Product? data = _repo.ProductRepository.GetNotracking(u => u.ProductId == dto.ProductId).;
                 if (data != null)
                 {
                    data = _mapper.Map<Product>(dto);
