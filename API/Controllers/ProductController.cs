@@ -89,6 +89,7 @@ namespace API.Controllers
                 if (data != null)
                 {
                    data = _mapper.Map<Product>(dto);
+                    data.ProductStatus = SD.ProductStatus.Available.ToString();
                     _repo.ProductRepository.Update(data);
                     _repo.Save();
                     _response.Message = "Update succesfully !!! ";
