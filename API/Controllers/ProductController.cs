@@ -116,7 +116,7 @@ namespace API.Controllers
         {
             try
             {
-                Product? data = _repo.ProductRepository.Get(u => u.ProductId == id);
+                Product? data = _repo.ProductRepository.Get(u => u.ProductId == id && u.ProductStatus != SD.ProductStatus.Deleted.ToString());
                 if (data != null)
                 {
                     data.ProductStatus = SD.ProductStatus.Deleted.ToString();
