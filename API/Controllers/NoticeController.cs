@@ -30,7 +30,7 @@ namespace API.Controllers
         {
             try
             {
-                _response.Result = _repo.NoticeRepository.Get(u => u.UserId == id &&
+                _response.Result = _repo.NoticeRepository.GetAll(u => u.UserId == id &&
                             u.NoticeStatus != SD.NoticeStatus.Deleted.ToString());
             }
             catch (Exception ex)
