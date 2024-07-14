@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class DbInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -64,6 +64,27 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "order_item",
+                columns: table => new
+                {
+                    order_item_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    order_id = table.Column<int>(type: "int", nullable: true),
+                    product_id = table.Column<int>(type: "int", nullable: true),
+                    quantity = table.Column<int>(type: "int", nullable: true),
+                    price = table.Column<double>(type: "float", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__order_it__3764B6BCD7A53B3B", x => x.order_item_id);
+                    table.ForeignKey(
+                        name: "FK_order_item_product_product_id",
+                        column: x => x.product_id,
+                        principalTable: "product",
+                        principalColumn: "product_id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "users",
                 columns: table => new
                 {
@@ -113,45 +134,20 @@ namespace API.Migrations
                 {
                     order_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    order_date = table.Column<DateTime>(type: "date", nullable: false),
-                    user_id = table.Column<int>(type: "int", nullable: false),
-                    order_total_amount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    order_status = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false)
+                    order_date = table.Column<DateTime>(type: "date", nullable: true),
+                    user_id = table.Column<int>(type: "int", nullable: true),
+                    PaymentType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    order_total_amount = table.Column<double>(type: "float", nullable: true),
+                    order_status = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__orders__465962292AC60F6D", x => x.order_id);
                     table.ForeignKey(
-                        name: "FK_orders_users",
+                        name: "FK_orders_users_user_id",
                         column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "users_id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "order_item",
-                columns: table => new
-                {
-                    order_item_id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    order_id = table.Column<int>(type: "int", nullable: false),
-                    product_id = table.Column<int>(type: "int", nullable: false),
-                    quantity = table.Column<int>(type: "int", nullable: false),
-                    price = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__order_it__3764B6BCD7A53B3B", x => x.order_item_id);
-                    table.ForeignKey(
-                        name: "FK_order_item_orders",
-                        column: x => x.order_id,
-                        principalTable: "orders",
-                        principalColumn: "order_id");
-                    table.ForeignKey(
-                        name: "FK_order_item_product",
-                        column: x => x.product_id,
-                        principalTable: "product",
-                        principalColumn: "product_id");
                 });
 
             migrationBuilder.CreateTable(
@@ -170,21 +166,17 @@ namespace API.Migrations
                 {
                     table.PrimaryKey("PK__payment__ED1FC9EA4B2B8A33", x => x.payment_id);
                     table.ForeignKey(
-                        name: "FK_payment_orders",
+                        name: "FK_payment_orders_order_id",
                         column: x => x.order_id,
                         principalTable: "orders",
-                        principalColumn: "order_id");
+                        principalColumn: "order_id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_notice_user_id",
                 table: "notice",
                 column: "user_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_order_item_order_id",
-                table: "order_item",
-                column: "order_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_order_item_product_id",
