@@ -102,8 +102,6 @@ namespace API.Controllers
 
                 IEnumerable<Product> products = _repo.ProductRepository.GetAll();
 
-                
-
                 Order data = new Order()
                 {
                     OrderDate = DateTime.Now,
@@ -112,6 +110,15 @@ namespace API.Controllers
                     OrderStatus = SD.OrderStatus.PaySucess.ToString(),
                     PaymentType = dto.PaymentType
                 };
+
+
+                if (dto.PaymentType != null && dto.PaymentType.ToLower() == SD.paymentType.cod.ToString())
+                {
+                    data.OrderStatus = SD.OrderStatus.Pending.ToString();   
+                }
+
+
+                
 
                 _repo.OrderRepository.Add(data);
                 _repo.Save();

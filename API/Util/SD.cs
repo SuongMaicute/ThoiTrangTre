@@ -20,6 +20,12 @@ namespace MPVI_Warehouse.Util
             Deleted
         }
 
+        public enum paymentType
+        {
+            cod,
+            paypal
+        }
+
         public enum NoticeStatus
         {
             New, 
