@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(ThoiTrangContext))]
-    [Migration("20240622110303_init")]
-    partial class init
+    [Migration("20240707142711_DbInit")]
+    partial class DbInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -125,22 +125,24 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
-                    b.Property<DateTime>("OrderDate")
+                    b.Property<DateTime?>("OrderDate")
                         .HasColumnType("date")
                         .HasColumnName("order_date");
 
                     b.Property<string>("OrderStatus")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)")
                         .HasColumnName("order_status");
 
-                    b.Property<decimal>("OrderTotalAmount")
-                        .HasColumnType("decimal(10, 2)")
+                    b.Property<double?>("OrderTotalAmount")
+                        .HasColumnType("float")
                         .HasColumnName("order_total_amount");
 
-                    b.Property<int>("UserId")
+                    b.Property<string>("PaymentType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserId")
                         .HasColumnType("int")
                         .HasColumnName("user_id");
 
@@ -161,26 +163,24 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("int")
                         .HasColumnName("order_id");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(10, 2)")
+                    b.Property<double?>("Price")
+                        .HasColumnType("float")
                         .HasColumnName("price");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int")
                         .HasColumnName("product_id");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int?>("Quantity")
                         .HasColumnType("int")
                         .HasColumnName("quantity");
 
                     b.HasKey("OrderItemId")
                         .HasName("PK__order_it__3764B6BCD7A53B3B");
-
-                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
@@ -376,41 +376,25 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Order", b =>
                 {
-                    b.HasOne("API.Models.User", "User")
+                    b.HasOne("API.Models.User", null)
                         .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .IsRequired()
-                        .HasConstraintName("FK_orders_users");
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("API.Models.OrderItem", b =>
                 {
-                    b.HasOne("API.Models.Order", "Order")
+                    b.HasOne("API.Models.Product", null)
                         .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .IsRequired()
-                        .HasConstraintName("FK_order_item_orders");
-
-                    b.HasOne("API.Models.Product", "Product")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("ProductId")
-                        .IsRequired()
-                        .HasConstraintName("FK_order_item_product");
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("API.Models.Payment", b =>
                 {
                     b.HasOne("API.Models.Order", "Order")
-                        .WithMany("Payments")
+                        .WithMany()
                         .HasForeignKey("OrderId")
-                        .IsRequired()
-                        .HasConstraintName("FK_payment_orders");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Order");
                 });
@@ -424,13 +408,6 @@ namespace API.Migrations
                         .HasConstraintName("FK_users_roles");
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("API.Models.Order", b =>
-                {
-                    b.Navigation("OrderItems");
-
-                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("API.Models.Product", b =>
