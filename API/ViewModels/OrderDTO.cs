@@ -7,9 +7,11 @@
         public DateTime OrderDate { get; set; }
 
         public int UserId { get; set; }
+        public string? PaymentType { get; set; }
 
         public double? OrderTotalAmount { get; set; }
 
         public string OrderStatus { get; set; } = null!;
+
     }
 }
